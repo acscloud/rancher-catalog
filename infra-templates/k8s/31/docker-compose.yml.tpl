@@ -167,12 +167,15 @@ kubernetes:
         - --runtime-config=batch/v2alpha1
         - --authentication-token-webhook-config-file=/etc/kubernetes/authconfig
         - --runtime-config=authentication.k8s.io/v1beta1=true
+        - --audit-log-path=/var/log/kubernetesaudit/kube-apiserver-audit.log
         {{- if eq .Values.RBAC "true" }}
         - --authorization-mode=RBAC
         {{- end }}
     environment:
         KUBERNETES_URL: https://kubernetes.kubernetes.rancher.internal:6443
     image: rancher/k8s:v1.7.2-rancher7
+    volumes:
+        - /var/log/kubernetesaudit:/var/log/kubernetesaudit
     links:
         - etcd
 
@@ -244,6 +247,9 @@ controller-manager:
         - --address=0.0.0.0
         - --root-ca-file=/etc/kubernetes/ssl/ca.pem
         - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
+        - --node-monitor-period=2s
+        - --node-monitor-grace-period=16s
+        - --pod-eviction-timeout=30s
     image: rancher/k8s:v1.7.2-rancher7
     labels:
         {{- if eq .Values.CONSTRAINT_TYPE "required" }}

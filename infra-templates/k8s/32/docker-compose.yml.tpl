@@ -247,6 +247,9 @@ controller-manager:
         - --address=0.0.0.0
         - --root-ca-file=/etc/kubernetes/ssl/ca.pem
         - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
+        - --node-monitor-period=2s
+        - --node-monitor-grace-period=16s
+        - --pod-eviction-timeout=30s
     image: rancher/k8s:v1.7.4-rancher2
     labels:
         {{- if eq .Values.CONSTRAINT_TYPE "required" }}

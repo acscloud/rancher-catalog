@@ -10,3 +10,10 @@ healthcheck:
       response_timeout: 2000
       unhealthy_threshold: 3
       healthy_threshold: 2
+prometheus-rancher-exporter:
+  health_check:
+      port: 9173
+      interval: 2000
+      response_timeout: 2000
+      unhealthy_threshold: 3
+      healthy_threshold: 2

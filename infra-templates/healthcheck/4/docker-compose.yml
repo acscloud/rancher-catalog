@@ -21,4 +21,6 @@ services:
       - HIDE_SYS=false
     expose:
       - 9173
+    volumes:
+      - /etc/ssl:/etc/ssl:ro
     image: rancher/prometheus-rancher-exporter:latest

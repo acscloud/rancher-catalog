@@ -22,7 +22,7 @@ rancherlb-prometheus-rancher-exporter:
   lb_config:
     port_rules:
     - protocol: http
-      service: healthcheck/prometheus-rancher-exporter
+      service: prometheus-rancher-exporter
       source_port: 9173
       target_port: 9173
     health_check:

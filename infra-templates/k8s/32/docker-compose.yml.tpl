@@ -120,6 +120,7 @@ etcd:
         {{- end }}
         io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
         io.rancher.sidekicks: data
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     environment:
         RANCHER_DEBUG: 'true'
         EMBEDDED_BACKUPS: '${EMBEDDED_BACKUPS}'
@@ -151,6 +152,7 @@ kubernetes:
         io.rancher.sidekicks: kube-hostname-updater
         io.rancher.websocket.proxy.port: "6443"
         io.rancher.websocket.proxy.scheme: "https"
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     command:
         - kube-apiserver
         - --storage-backend=etcd2
@@ -194,6 +196,7 @@ kubectld:
         {{- end }}
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent_service.kubernetes_stack: "true"
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     environment:
         SERVER: http://kubernetes.kubernetes.rancher.internal
         LISTEN: ":8091"
@@ -210,6 +213,7 @@ kubectl-shell:
         io.rancher.container.agent.role: environmentAdmin
         io.rancher.k8s.kubectld: "true"
         io.rancher.k8s.token: "true"
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     command:
         - kubectl-shell-entry.sh
     image: rancher/kubectld:v0.8.3
@@ -236,6 +240,7 @@ scheduler:
         {{- end }}
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     links:
         - kubernetes
 
@@ -257,6 +262,7 @@ controller-manager:
         {{- end }}
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     links:
         - kubernetes
 
@@ -269,6 +275,7 @@ rancher-kubernetes-agent:
         io.rancher.container.agent.role: agent,environmentAdmin
         io.rancher.container.agent_service.labels_provider: "true"
         io.rancher.k8s.agent: "true"
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     environment:
         KUBERNETES_URL: https://kubernetes.kubernetes.rancher.internal:6443
     image: rancher/kubernetes-agent:v0.6.5
@@ -287,6 +294,7 @@ rancher-ingress-controller:
         {{- end }}
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     environment:
         KUBERNETES_URL: https://kubernetes.kubernetes.rancher.internal:6443
         RANCHER_LB_SEPARATOR: $RANCHER_LB_SEPARATOR
@@ -316,6 +324,7 @@ rancher-kubernetes-auth:
         io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name=$${stack_name}/kubernetes
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     health_check:
         request_line: GET /healthcheck HTTP/1.0
         port: 10240
@@ -335,6 +344,7 @@ addon-starter:
         {{- end }}
         io.rancher.container.create_agent: 'true'
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.scheduler.affinity:host_label_ne: app=lb
     environment:
         KUBERNETES_URL: https://kubernetes.kubernetes.rancher.internal:6443
         REGISTRY: ${REGISTRY}

@@ -17,6 +17,7 @@ services:
     labels:
       io.rancher.container.create_agent: 'true'
       io.rancher.container.agent.role: 'environment'
+      io.rancher.scheduler.affinity:host_label_ne: app=lb
     environment:
       - HIDE_SYS=false
     expose:
@@ -25,6 +26,8 @@ services:
       - /etc/ssl:/etc/ssl:ro
     image: rancher/prometheus-rancher-exporter:latest
   rancherlb-prometheus-rancher-exporter:
+    labels:
+      io.rancher.scheduler.affinity:host_label_ne: app=lb
     image: rancher/lb-service-haproxy:v0.7.9
     ports:
     - 9173
